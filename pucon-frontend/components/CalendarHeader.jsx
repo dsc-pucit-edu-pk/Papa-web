@@ -9,7 +9,7 @@ import format from "date-fns/format";
 
 const Root = styled("div")(({ theme }) => ({
   backgroundImage: 'url("../../assets/images/backgrounds/header-bg.png")',
-  backgroundColor: "#FAFAFA",
+  backgroundColor: "#101827",
   color: "#FFFFFF",
   backgroundSize: "cover",
   backgroundPosition: "0 50%",

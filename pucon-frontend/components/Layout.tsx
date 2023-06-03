@@ -18,6 +18,7 @@ import FeedOutlinedIcon from "@mui/icons-material/FeedOutlined";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import Link from "next/link";
+import { useMediaQuery } from "@mui/material";
 
 const drawerWidth = 240;
 
@@ -71,7 +72,9 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 }));
 
 export default function Layout({ children }) {
-  const [open, setOpen] = React.useState(false);
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+  const [open, setOpen] = React.useState(isMobile ? false : true);
   const router = useRouter();
   const pathname = router.pathname;
   console.log(pathname);
@@ -87,7 +90,12 @@ export default function Layout({ children }) {
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
-      <AppBar position="fixed" color="transparent" open={open}>
+      <AppBar
+        position="fixed"
+        color="transparent"
+        sx={{ background: "white" }}
+        open={open}
+      >
         <Toolbar>
           <IconButton
             color="inherit"
