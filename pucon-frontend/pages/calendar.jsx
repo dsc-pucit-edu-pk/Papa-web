@@ -71,6 +71,9 @@ const StyledAddButton = styled("div")(({ theme }) => ({
 function CalendarApp(props) {
   const [currentDate, setCurrentDate] = useState();
   const [events, setEvents] = useState([]);
+  const [eventsToShow, setEventsToShow] = useState([]);
+  const [eventTags, setEventTags] = useState("");
+
   const [modalData, setModalData] = useState({
     open: false,
     event: null,
@@ -117,6 +120,7 @@ function CalendarApp(props) {
 
       console.log("formattedData", formattedData);
       setEvents(formattedData);
+      setEventsToShow(formattedData);
     });
   }, []);
 
@@ -154,7 +158,16 @@ function CalendarApp(props) {
   const handleEventClick = (clickInfo) => {
     const { id, title, allDay, start, end, extendedProps } = clickInfo.event;
     console.log(id, title, allDay, start, end, extendedProps);
-    console.log("handleEventClick");
+    console.log("extendedProps", extendedProps);
+    setModalData({
+      open: true,
+      event: {
+        ...extendedProps,
+        startAt: start,
+        endAt: end,
+        title: title,
+      },
+    });
   };
 
   const handleDates = (rangeInfo) => {
@@ -174,11 +187,28 @@ function CalendarApp(props) {
     console.log(removeInfo);
   };
 
+  //  if event tag exist, filter data of only that tag
+
+  useEffect(() => {
+    if (eventTags) {
+      let filteredEvents = events.filter((item) => {
+        return item.tags.includes(eventTags);
+      });
+      console.log("filteredEvents", filteredEvents);
+      setEventsToShow(filteredEvents);
+    }
+  }, [eventTags]);
+
   return (
     <>
       <Layout>
         <Root className="flex flex-col  relative flex-1">
-          <CalendarHeader calendarRef={calendarRef} currentDate={currentDate} />
+          <CalendarHeader
+            calendarRef={calendarRef}
+            currentDate={currentDate}
+            eventTags={eventTags}
+            setEventTags={setEventTags}
+          />
 
           <div className="flex flex-1 container">
             <motion.div
@@ -197,7 +227,7 @@ function CalendarApp(props) {
                 weekends
                 datesSet={handleDates}
                 select={handleDateSelect}
-                events={events}
+                events={eventsToShow}
                 eventContent={renderEventContent}
                 eventClick={handleEventClick}
                 eventAdd={handleEventAdd}
@@ -213,6 +243,7 @@ function CalendarApp(props) {
       </Layout>
       <EventModal
         openEventModal={modalData.open}
+        eventData={modalData.event}
         setOpenEventModal={setModalData}
       />
     </>

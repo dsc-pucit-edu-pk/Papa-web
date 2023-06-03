@@ -11,6 +11,7 @@ import { Dialog } from "@mui/material";
 import { storage } from "../firebase";
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 import { CreateEvent } from "../ApiCalls/CreateEvent";
+import { EditEVnt } from "../ApiCalls/EditEvent";
 
 const style = {
   position: "absolute" as "absolute",
@@ -27,11 +28,13 @@ const style = {
 interface Props {
   openEventModal?: boolean | undefined;
   setOpenEventModal?: React.Dispatch<React.SetStateAction<object>> | undefined;
+  eventData?: any | undefined;
 }
 
 export default function EventModal({
   openEventModal,
   setOpenEventModal,
+  eventData,
 }: Props) {
   // we want title , description , image , duration , date , tags list, limit of participants, recurring or not
   const [eventImage, setEventImage] = useState("");
@@ -45,7 +48,25 @@ export default function EventModal({
   const [endAt, setEndAt] = useState("");
   // recurring has options once, day, week , month
 
-  const router = useRouter();
+  if (eventData) {
+    console.log(eventData);
+  }
+  // if event data is present then we are editing the event
+
+  useEffect(() => {
+    if (eventData) {
+      console.log("eventData", eventData);
+      setEventName(eventData.title);
+      setEventDescription(eventData.description);
+      setEventTags(eventData.tags);
+      setEventLimit(eventData.limit);
+      setEventRecurring(eventData.type);
+      setEndAt("");
+      setEventImagePreview(eventData.poster_url);
+      setStartAt(new Date(eventData.startAt));
+      setEndAt(new Date(eventData.endAt));
+    }
+  }, [eventData]);
 
   useEffect(() => {
     if (!openEventModal) {
@@ -60,14 +81,18 @@ export default function EventModal({
   }, [openEventModal]);
 
   const createEvent = async () => {
+    console.log("eventData", eventData);
     // upload image to firebase
-    const storageRef = ref(storage, `event/${eventName}`);
-    await uploadBytes(storageRef, eventImage);
-    const fileUrl = await getDownloadURL(storageRef);
-    console.log(fileUrl);
+    let fileUrl = eventData.poster_url ? eventData.poster_url : "";
+    if (!eventData) {
+      const storageRef = ref(storage, `event/${eventName}`);
+      await uploadBytes(storageRef, eventImage);
+      fileUrl = await getDownloadURL(storageRef);
+      console.log(fileUrl);
+    }
     // create event in db
 
-    let eventData = {
+    let eventDataa = {
       title: eventName,
       description: eventDescription,
       poster_url: fileUrl,
@@ -76,10 +101,13 @@ export default function EventModal({
       tags: [eventTags],
       limit: eventLimit,
       type: eventRecurring,
+      _id: eventData ? eventData._id : "",
     };
     try {
-      await CreateEvent(eventData);
-      alert("Event Created Successfully");
+      if (!eventData) await CreateEvent(eventDataa);
+      else await EditEVnt(eventDataa);
+      if (eventData) alert("Event Created Successfully");
+      else alert("Event Edited Successfully");
       setOpenEventModal({
         open: false,
         event: null,
@@ -87,7 +115,7 @@ export default function EventModal({
     } catch (err) {
       console.log(err);
     }
-    console.log(eventData);
+    console.log(eventDataa);
   };
   return (
     <div>
@@ -107,7 +135,7 @@ export default function EventModal({
             <div className="overflow-scroll relative px-10 pb-5">
               <div className="flex flex-col justify-center gap-10 items-center w-full mx-auto overflow-scroll">
                 <h1 className="conflux-text text-center text-3xl lg:text-5xl lg:mb-10 mt-16">
-                  Create an Event
+                  {eventData ? "Edit Event" : "Create Event"}
                 </h1>
                 {/* image preview */}
                 <div className="w-full h-[150px] lg:h-[300px] bg-[#696969] rounded-lg flex justify-center items-center">
@@ -229,7 +257,7 @@ export default function EventModal({
                   className="w-full p-4 rounded border border-[#696969] bg-transparent outline-none text-white"
                   onClick={createEvent}
                 >
-                  Create Event
+                  Submit
                 </Button>
               </div>
             </div>

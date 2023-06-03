@@ -105,6 +105,7 @@ const viewNamesObj = {
 
 function CalendarHeader(props) {
   const { calendarRef, currentDate } = props;
+  const { eventTags, setEventTags } = props;
   const [modalData, setModalData] = useState({
     open: false,
     event: null,
@@ -185,16 +186,17 @@ function CalendarHeader(props) {
               animate={{ opacity: 1, transition: { delay: 0.3 } }}
             >
               <div className="w-40">
-                <Select
-                  value={"tag"}
-                  label="tags"
-                  sx={{ width: "160px", color: "white" }}
-                  onChange={() => {}}
+                <select
+                  className="w-full p-4 rounded border border-[#696969] bg-transparent outline-none"
+                  value={eventTags}
+                  onChange={(e) => setEventTags(e.target.value)}
                 >
-                  <MenuItem value={10}>Ten</MenuItem>
-                  <MenuItem value={20}>Twenty</MenuItem>
-                  <MenuItem value={30}>Thirty</MenuItem>
-                </Select>
+                  <option value="sports">Sports</option>
+                  <option value="entertainment">Entertainment</option>
+                  <option value="education">Education</option>
+                  <option value="political">Political</option>
+                  <option value="others">Others</option>
+                </select>
               </div>
               <div className="flex">
                 <Tooltip title="Previous">
