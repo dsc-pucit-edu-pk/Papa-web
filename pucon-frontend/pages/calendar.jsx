@@ -10,6 +10,7 @@ import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import CalendarHeader from "@/components/CalendarHeader";
 import Layout from "@/components/Layout";
+import EventModal from "@/components/EventModal";
 
 const Root = styled("div")(({ theme }) => ({
   flex: 1,
@@ -68,6 +69,11 @@ const StyledAddButton = styled("div")(({ theme }) => ({
 }));
 function CalendarApp(props) {
   const [currentDate, setCurrentDate] = useState();
+  const [modalData, setModalData] = useState({
+    open: false,
+    event: null,
+  });
+
   const events = [];
   const user = {};
 
@@ -114,41 +120,47 @@ function CalendarApp(props) {
   };
 
   return (
-    <Layout>
-      <Root className="flex flex-col  relative flex-1">
-        <CalendarHeader calendarRef={calendarRef} currentDate={currentDate} />
+    <>
+      <Layout>
+        <Root className="flex flex-col  relative flex-1">
+          <CalendarHeader calendarRef={calendarRef} currentDate={currentDate} />
 
-        <div className="flex flex-1 container">
-          <motion.div
-            className="w-full"
-            initial={{ y: 20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1, transition: { delay: 0.2 } }}
-          >
-            <FullCalendar
-              plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-              headerToolbar={false}
-              initialView="dayGridMonth"
-              editable
-              selectable
-              selectMirror
-              dayMaxEvents
-              weekends
-              datesSet={handleDates}
-              select={handleDateSelect}
-              events={events}
-              eventContent={renderEventContent}
-              eventClick={handleEventClick}
-              eventAdd={handleEventAdd}
-              eventChange={handleEventChange}
-              eventRemove={handleEventRemove}
-              eventDrop={handleEventDrop}
-              initialDate={new Date()}
-              ref={calendarRef}
-            />
-          </motion.div>
-        </div>
-      </Root>
-    </Layout>
+          <div className="flex flex-1 container">
+            <motion.div
+              className="w-full"
+              initial={{ y: 20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1, transition: { delay: 0.2 } }}
+            >
+              <FullCalendar
+                plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+                headerToolbar={false}
+                initialView="dayGridMonth"
+                editable
+                selectable
+                selectMirror
+                dayMaxEvents
+                weekends
+                datesSet={handleDates}
+                select={handleDateSelect}
+                events={events}
+                eventContent={renderEventContent}
+                eventClick={handleEventClick}
+                eventAdd={handleEventAdd}
+                eventChange={handleEventChange}
+                eventRemove={handleEventRemove}
+                eventDrop={handleEventDrop}
+                initialDate={new Date()}
+                ref={calendarRef}
+              />
+            </motion.div>
+          </div>
+        </Root>
+      </Layout>
+      <EventModal
+        openEventModal={modalData.open}
+        setOpenEventModal={setModalData}
+      />
+    </>
   );
 }
 
