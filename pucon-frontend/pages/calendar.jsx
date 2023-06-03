@@ -12,6 +12,7 @@ import CalendarHeader from "@/components/CalendarHeader";
 import Layout from "@/components/Layout";
 
 const Root = styled("div")(({ theme }) => ({
+  flex: 1,
   "& a": {
     color: `${theme.palette.text.primary}!important`,
     textDecoration: "none!important",
@@ -114,7 +115,7 @@ function CalendarApp(props) {
 
   return (
     <Layout>
-      <Root className="flex flex-col flex-auto relative">
+      <Root className="flex flex-col  relative flex-1">
         <CalendarHeader calendarRef={calendarRef} currentDate={currentDate} />
 
         <div className="flex flex-1 container">
@@ -145,16 +146,6 @@ function CalendarApp(props) {
               ref={calendarRef}
             />
           </motion.div>
-
-          <StyledAddButton
-            as={motion.div}
-            initial={{ scale: 0 }}
-            animate={{ scale: 1, transition: { delay: 0.4 } }}
-          >
-            <Fab color="secondary" aria-label="add">
-              <Icon>add</Icon>
-            </Fab>
-          </StyledAddButton>
         </div>
       </Root>
     </Layout>

@@ -10,6 +10,8 @@ import CalendarViewMonthOutlinedIcon from "@mui/icons-material/CalendarViewMonth
 import CalendarViewWeekOutlinedIcon from "@mui/icons-material/CalendarViewWeekOutlined";
 import CalendarViewDayOutlinedIcon from "@mui/icons-material/CalendarViewDayOutlined";
 import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined";
+import ArrowBackIosNewOutlinedIcon from "@mui/icons-material/ArrowBackIosNewOutlined";
+import ArrowForwardIosOutlinedIcon from "@mui/icons-material/ArrowForwardIosOutlined";
 
 const Root = styled("div")(({ theme }) => ({
   backgroundImage: 'url("../../assets/images/backgrounds/header-bg.png")',
@@ -18,6 +20,7 @@ const Root = styled("div")(({ theme }) => ({
   backgroundSize: "cover",
   backgroundPosition: "0 50%",
   backgroundRepeat: "no-repeat",
+
   "&:before": {
     content: "''",
     position: "absolute",
@@ -81,15 +84,15 @@ const Root = styled("div")(({ theme }) => ({
 const viewNamesObj = {
   dayGridMonth: {
     title: "Month",
-    icon: <CalendarViewMonthOutlinedIcon />,
+    icon: <CalendarViewMonthOutlinedIcon sx={{ color: "white" }} />,
   },
   timeGridWeek: {
     title: "Week",
-    icon: <CalendarViewWeekOutlinedIcon />,
+    icon: <CalendarViewWeekOutlinedIcon sx={{ color: "white" }} />,
   },
   timeGridDay: {
     title: "Day",
-    icon: <CalendarViewDayOutlinedIcon />,
+    icon: <CalendarViewDayOutlinedIcon sx={{ color: "white" }} />,
   },
 };
 
@@ -98,6 +101,7 @@ function CalendarHeader(props) {
 
   const mainThemeDark = {};
   const calendarApi = () => calendarRef.current?.getApi();
+
   return (
     <ThemeProvider theme={mainThemeDark}>
       <Root
@@ -106,22 +110,14 @@ function CalendarHeader(props) {
           format(new Date(currentDate?.start || null), "MMM")
         )}
       >
-        <div className="flex flex-1 flex-col p-12 justify-between z-10 container">
-          <div className="flex flex-col items-center justify-between sm:flex-row">
-            <div className="flex items-center my-16 sm:mb-0">
-              <Icon
-                component={motion.span}
-                initial={{ scale: 0 }}
-                animate={{ scale: 1, transition: { delay: 0.2 } }}
-                className="text-24 md:text-32"
-              >
-                today
-              </Icon>
+        <div className="flex flex-1 flex-col justify-between z-10 container">
+          <div className="flex flex-col items-center justify-between sm:flex-row mb-16">
+            <div className="flex items-center my-16 mt-6 sm:mb-0">
               <motion.span
                 initial={{ x: -20 }}
                 animate={{ x: 0, transition: { delay: 0.2 } }}
                 delay={300}
-                className="text-16 md:text-24 mx-12 font-semibold"
+                className="text-16 text-2xl md:text-24 mx-12 font-semibold"
               >
                 Calendar
               </motion.span>
@@ -138,7 +134,7 @@ function CalendarHeader(props) {
                       onClick={() => calendarApi().today()}
                       size="large"
                     >
-                      <CalendarTodayOutlinedIcon />
+                      <CalendarTodayOutlinedIcon sx={{ color: "white" }} />
                     </IconButton>
                   </motion.div>
                 </div>
@@ -166,7 +162,7 @@ function CalendarHeader(props) {
           </div>
 
           <motion.div
-            className="flex items-center justify-center"
+            className="flex items-center justify-center my-5"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1, transition: { delay: 0.3 } }}
           >
@@ -176,7 +172,7 @@ function CalendarHeader(props) {
                 onClick={() => calendarApi().prev()}
                 size="large"
               >
-                <Icon>{"chevron_left"}</Icon>
+                <ArrowBackIosNewOutlinedIcon sx={{ color: "white" }} />
               </IconButton>
             </Tooltip>
             <Typography variant="h6">{currentDate?.view.title}</Typography>
@@ -186,7 +182,7 @@ function CalendarHeader(props) {
                 onClick={() => calendarApi().next()}
                 size="large"
               >
-                <Icon>{"chevron_right"}</Icon>
+                <ArrowForwardIosOutlinedIcon sx={{ color: "white" }} />
               </IconButton>
             </Tooltip>
           </motion.div>
