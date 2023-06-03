@@ -19,26 +19,12 @@ router.post("/register", async (req, res) => {
   let data = {
     username: req.body.username,
     email: req.body.email,
-    user_type: req.body.user_type,
     password: CryptoJS.AES.encrypt(
       req.body.password,
       process.env.PASS_SEC
     ).toString(),
   };
-  if (req.body.DOB) {
-    data = {
-      username: req.body.username,
-      email: req.body.email,
-      user_type: req.body.user_type,
-      password: CryptoJS.AES.encrypt(
-        req.body.password,
-        process.env.PASS_SEC
-      ).toString(),
-      DOB: req.body.DOB,
-      gender: "male",
-    };
-  }
-  console.log(data);
+
   const newUser = new User({ ...data });
 
   try {
@@ -73,7 +59,6 @@ router.post("/login", async (req, res) => {
       {
         id: user._id,
         username: user.username,
-        user_type: user.user_type,
       },
       process.env.JWT_SEC,
       { expiresIn: "3d" }
@@ -82,7 +67,6 @@ router.post("/login", async (req, res) => {
     res.status(200).json({
       userId: user._id,
       username: user.username,
-      user_type: user.user_type,
       accessToken,
     });
   } catch (err) {
