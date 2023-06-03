@@ -13,6 +13,7 @@ import Layout from "@/components/Layout";
 import EventModal from "@/components/EventModal";
 import { globalContext } from "@/store/GlobalContext";
 import { GetEvents } from "../ApiCalls/GetEvents";
+import { useRouter } from "next/router";
 
 const Root = styled("div")(({ theme }) => ({
   flex: 1,
@@ -73,6 +74,7 @@ function CalendarApp(props) {
   const {
     globalData: { loggedIn },
   } = useContext(globalContext);
+  const router = useRouter();
   if (!loggedIn) {
     router.push("/login");
     return null;
