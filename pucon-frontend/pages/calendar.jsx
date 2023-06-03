@@ -3,7 +3,7 @@ import { styled } from "@mui/material/styles";
 import Icon from "@mui/material/Icon";
 import Typography from "@mui/material/Typography";
 import { motion } from "framer-motion";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
@@ -11,6 +11,7 @@ import interactionPlugin from "@fullcalendar/interaction";
 import CalendarHeader from "@/components/CalendarHeader";
 import Layout from "@/components/Layout";
 import EventModal from "@/components/EventModal";
+import { GetEvents } from "../ApiCalls/GetEvents";
 
 const Root = styled("div")(({ theme }) => ({
   flex: 1,
@@ -69,19 +70,64 @@ const StyledAddButton = styled("div")(({ theme }) => ({
 }));
 function CalendarApp(props) {
   const [currentDate, setCurrentDate] = useState();
+  const [events, setEvents] = useState([]);
   const [modalData, setModalData] = useState({
     open: false,
     event: null,
   });
 
-  const events = [
-    {
-      id: 1,
-      title: "All Day Event",
-      start: new Date(2023, 3, 0),
-      end: new Date(2023, 4, 11),
-    },
-  ];
+  useEffect(() => {
+    GetEvents().then((data) => {
+      console.log(data);
+      let formattedData = data.map((item) => {
+        return {
+          ...item,
+          start: new Date(item.date),
+          // end is start plus duration in milliseconds
+          end: new Date(new Date(item.date).getTime() + item.duration),
+        };
+      });
+      {
+        /* event types are sports, entertainment,education, political and others */
+      }
+      let dataWithColors = formattedData.map((item) => {
+        let color = "";
+        switch (item.tags[0]) {
+          case "sports":
+            color = "#FF9800";
+            break;
+          case "entertainment":
+            color = "#2196F3";
+            break;
+          case "education":
+            color = "#4CAF50";
+            break;
+          case "political":
+            color = "#F44336";
+            break;
+          default:
+            color = "#9C27B0";
+        }
+        return {
+          ...item,
+          color,
+        };
+      });
+      formattedData = dataWithColors;
+
+      console.log("formattedData", formattedData);
+      setEvents(formattedData);
+    });
+  }, []);
+
+  // const events = [
+  //   {
+  //     id: 1,
+  //     title: "All Day Event",
+  //     start: new Date(2023, 3, 0),
+  //     end: new Date(2023, 4, 11),
+  //   },
+  // ];
 
   const user = {};
 
@@ -108,6 +154,7 @@ function CalendarApp(props) {
   const handleEventClick = (clickInfo) => {
     const { id, title, allDay, start, end, extendedProps } = clickInfo.event;
     console.log(id, title, allDay, start, end, extendedProps);
+    console.log("handleEventClick");
   };
 
   const handleDates = (rangeInfo) => {
@@ -173,8 +220,16 @@ function CalendarApp(props) {
 }
 
 function renderEventContent(eventInfo) {
+  //  get data of event
+  // console.log("eventInfooooo", eventInfo);
+
   return (
-    <div className="flex items-center">
+    <div
+      className="flex items-center"
+      style={{
+        backgroundColor: eventInfo.event.color,
+      }}
+    >
       <Typography className="text-12 font-semibold">
         {eventInfo.timeText}
       </Typography>
