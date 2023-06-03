@@ -18,7 +18,6 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { Button } from "@mui/material";
-import { set } from "date-fns/esm";
 import { useState } from "react";
 
 const Root = styled("div")(({ theme }) => ({
@@ -207,7 +206,9 @@ function CalendarHeader(props) {
                     <ArrowBackIosNewOutlinedIcon sx={{ color: "white" }} />
                   </IconButton>
                 </Tooltip>
-                <Typography variant="h6">{currentDate?.view.title}</Typography>
+                <Typography variant="h6" sx={{ marginTop: "8px" }}>
+                  {currentDate?.view.title}
+                </Typography>
                 <Tooltip title="Next">
                   <IconButton
                     aria-label="Next"
