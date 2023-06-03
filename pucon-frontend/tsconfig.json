@@ -18,6 +18,9 @@
       "@/*": ["./*"]
     }
   },
+<<<<<<< HEAD
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "pages/calendar.jsx", "components/CalendarHeader.jsx", "ApiCalls/CreateEvent.js"],
+=======
   "include": [
     "next-env.d.ts",
     "**/*.ts",
@@ -26,5 +29,6 @@
     "components/CalendarHeader.jsx",
     "ApiCalls/GetEvents.js"
   ],
+>>>>>>> 70e65e9e6fa04725d902d52bb786eaacbac57610
   "exclude": ["node_modules"]
 }
