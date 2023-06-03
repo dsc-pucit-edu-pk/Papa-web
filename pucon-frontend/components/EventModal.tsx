@@ -12,6 +12,7 @@ import { storage } from "../firebase";
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 import { CreateEvent } from "../ApiCalls/CreateEvent";
 import { EditEVnt } from "../ApiCalls/EditEvent";
+import { DeleteEventt } from "../ApiCalls/DeleteEvent";
 
 const style = {
   position: "absolute" as "absolute",
@@ -117,6 +118,19 @@ export default function EventModal({
     }
     console.log(eventDataa);
   };
+  const deleteEvent = async () => {
+    try {
+      await DeleteEventt(eventData);
+      alert("Event Deleted Successfully");
+      setOpenEventModal({
+        open: false,
+        event: null,
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
     <div>
       <Dialog
@@ -259,6 +273,17 @@ export default function EventModal({
                 >
                   Submit
                 </Button>
+                {/* if eventData exist, show delete button */}
+                {eventData && (
+                  <Button
+                    variant="contained"
+                    className="w-full p-4 rounded border border-[#696969] bg-transparent outline-none text-white"
+                    onClick={deleteEvent}
+                    color="error"
+                  >
+                    Delete
+                  </Button>
+                )}
               </div>
             </div>
           </div>
