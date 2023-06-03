@@ -18,8 +18,9 @@ import FeedOutlinedIcon from "@mui/icons-material/FeedOutlined";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import Link from "next/link";
-import { useMediaQuery } from "@mui/material";
+import { Button, useMediaQuery } from "@mui/material";
 import EventOutlinedIcon from "@mui/icons-material/EventOutlined";
+import { globalContext } from "@/store/GlobalContext";
 const drawerWidth = 240;
 
 const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })<{
@@ -78,6 +79,9 @@ export default function Layout({ children }) {
   const router = useRouter();
   const pathname = router.pathname;
   console.log(pathname);
+  const {
+    globalData: { loggedIn, username },
+  } = React.useContext(globalContext);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -106,9 +110,19 @@ export default function Layout({ children }) {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap component="div">
-            Persistent drawer
-          </Typography>
+          <div className="flex-1 w-full flex justify-between">
+            <Typography variant="h6" noWrap component="div">
+              {username}
+            </Typography>
+            <Button
+              onClick={() => {
+                localStorage.removeItem("token");
+                document.location.reload();
+              }}
+            >
+              SignOut
+            </Button>
+          </div>
         </Toolbar>
       </AppBar>
       <Drawer

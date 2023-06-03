@@ -3,7 +3,7 @@ import { styled } from "@mui/material/styles";
 import Icon from "@mui/material/Icon";
 import Typography from "@mui/material/Typography";
 import { motion } from "framer-motion";
-import { useRef, useState } from "react";
+import { useContext, useRef, useState } from "react";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
@@ -11,6 +11,7 @@ import interactionPlugin from "@fullcalendar/interaction";
 import CalendarHeader from "@/components/CalendarHeader";
 import Layout from "@/components/Layout";
 import EventModal from "@/components/EventModal";
+import { globalContext } from "@/store/GlobalContext";
 
 const Root = styled("div")(({ theme }) => ({
   flex: 1,
@@ -68,6 +69,13 @@ const StyledAddButton = styled("div")(({ theme }) => ({
   zIndex: 99,
 }));
 function CalendarApp(props) {
+  const {
+    globalData: { loggedIn },
+  } = useContext(globalContext);
+  if (!loggedIn) {
+    router.push("/login");
+    return null;
+  }
   const [currentDate, setCurrentDate] = useState();
   const [modalData, setModalData] = useState({
     open: false,

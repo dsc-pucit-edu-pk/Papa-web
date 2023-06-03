@@ -1,6 +1,7 @@
 export type UserAuthData = {
   username: string;
   userId: string;
+  email: string;
 };
 export const getAuthStatusApi = async () => {
   const response = await fetch(

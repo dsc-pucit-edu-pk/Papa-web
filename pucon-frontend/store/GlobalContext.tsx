@@ -5,6 +5,7 @@ type GlobalData = {
   username: string;
   loggedIn: boolean;
   authLoading: boolean;
+  email: string;
 };
 type ContextState =
   | { globalData: GlobalData } & {
@@ -13,6 +14,7 @@ type ContextState =
 const initialState: GlobalData = {
   username: "",
   userId: "",
+  email: "",
   loggedIn: false,
   authLoading: true,
 };
@@ -33,6 +35,7 @@ function GlobalContext({ children }: { children: React.ReactNode }) {
         setGlobalData({
           userId: data.userId,
           username: data.username,
+          email: data.email,
           loggedIn: true,
           authLoading: false,
         });

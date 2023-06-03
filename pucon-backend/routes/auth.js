@@ -9,7 +9,7 @@ router.get("/status", verifyToken, (req, res) => {
   res.status(200).json({
     username: req.user.username,
     userId: req.user.id,
-    user_type: req.user.user_type,
+    email: req.user.email,
   });
 });
 
