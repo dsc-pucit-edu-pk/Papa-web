@@ -9,7 +9,7 @@ const Feed = () => {
 		<div>
 			<Layout>
 				<SearchBar />
-				<div className="rounded-lg bg-slate-400">
+				<div className="rounded-lg bg-[#fafafa]">
 					{dlist.map((item) => (
 						<FeedCard />
 					))}
