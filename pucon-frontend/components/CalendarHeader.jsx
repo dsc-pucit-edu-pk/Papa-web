@@ -6,10 +6,14 @@ import Typography from "@mui/material/Typography";
 import clsx from "clsx";
 import { motion } from "framer-motion";
 import format from "date-fns/format";
+import CalendarViewMonthOutlinedIcon from "@mui/icons-material/CalendarViewMonthOutlined";
+import CalendarViewWeekOutlinedIcon from "@mui/icons-material/CalendarViewWeekOutlined";
+import CalendarViewDayOutlinedIcon from "@mui/icons-material/CalendarViewDayOutlined";
+import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined";
 
 const Root = styled("div")(({ theme }) => ({
   backgroundImage: 'url("../../assets/images/backgrounds/header-bg.png")',
-  backgroundColor: "#101827",
+  backgroundColor: "#FAFAFA",
   color: "#FFFFFF",
   backgroundSize: "cover",
   backgroundPosition: "0 50%",
@@ -77,15 +81,15 @@ const Root = styled("div")(({ theme }) => ({
 const viewNamesObj = {
   dayGridMonth: {
     title: "Month",
-    icon: "view_module",
+    icon: <CalendarViewMonthOutlinedIcon />,
   },
   timeGridWeek: {
     title: "Week",
-    icon: "view_week",
+    icon: <CalendarViewWeekOutlinedIcon />,
   },
   timeGridDay: {
     title: "Day",
-    icon: "view_agenda",
+    icon: <CalendarViewDayOutlinedIcon />,
   },
 };
 
@@ -134,7 +138,7 @@ function CalendarHeader(props) {
                       onClick={() => calendarApi().today()}
                       size="large"
                     >
-                      <Icon>today</Icon>
+                      <CalendarTodayOutlinedIcon />
                     </IconButton>
                   </motion.div>
                 </div>
@@ -152,7 +156,7 @@ function CalendarHeader(props) {
                         disabled={currentDate?.view.type === name}
                         size="large"
                       >
-                        <Icon>{view.icon}</Icon>
+                        {view.icon}
                       </IconButton>
                     </motion.div>
                   </div>

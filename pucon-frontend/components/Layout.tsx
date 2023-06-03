@@ -19,7 +19,7 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import { useMediaQuery } from "@mui/material";
-
+import EventOutlinedIcon from "@mui/icons-material/EventOutlined";
 const drawerWidth = 240;
 
 const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })<{
@@ -157,9 +157,21 @@ export default function Layout({ children }) {
                 }}
               >
                 <ListItemIcon sx={{ minWidth: "unset" }}>
-                  {<FeedOutlinedIcon sx={{ color: "white" }} />}
+                  {
+                    <FeedOutlinedIcon
+                      sx={{
+                        color: pathname == "/feed" ? "white" : "#b8babe",
+                      }}
+                    />
+                  }
                 </ListItemIcon>
-                <p className="text-sm font-medium ml-4">Feed</p>
+                <p
+                  className={`text-sm font-medium ml-4 ${
+                    pathname == "/feed" ? "text-white" : "text-[#b8babe]"
+                  }`}
+                >
+                  Feed
+                </p>
               </ListItemButton>
             </ListItem>
           </Link>
@@ -173,10 +185,22 @@ export default function Layout({ children }) {
                 }}
               >
                 <ListItemIcon sx={{ minWidth: "unset" }}>
-                  {<FeedOutlinedIcon sx={{ color: "white" }} />}
+                  {
+                    <EventOutlinedIcon
+                      sx={{
+                        color: pathname == "/calendar" ? "white" : "#b8babe",
+                      }}
+                    />
+                  }
                 </ListItemIcon>
 
-                <p className="text-sm font-medium ml-4">Calendar</p>
+                <p
+                  className={`text-sm font-medium ml-4 ${
+                    pathname == "/calendar" ? "text-white" : "text-[#b8babe]"
+                  }`}
+                >
+                  Calendar
+                </p>
               </ListItemButton>
             </ListItem>
           </Link>
