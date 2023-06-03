@@ -10,6 +10,7 @@ import { useState } from "react";
 import { Dialog } from "@mui/material";
 import { storage } from "../firebase";
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
+import { CreateEvent } from "../ApiCalls/CreateEvent";
 
 const style = {
   position: "absolute" as "absolute",
@@ -39,9 +40,10 @@ export default function EventModal({
   const [eventDescription, setEventDescription] = useState("");
   const [eventTags, setEventTags] = useState("");
   const [eventLimit, setEventLimit] = useState("");
-  const [eventRecurring, setEventRecurring] = useState(false);
+  const [eventRecurring, setEventRecurring] = useState("");
   const [startAt, setStartAt] = useState("");
   const [endAt, setEndAt] = useState("");
+  // recurring has options once, day, week , month
 
   const router = useRouter();
 
@@ -53,7 +55,7 @@ export default function EventModal({
       setEventDescription("");
       setEventTags("");
       setEventLimit("");
-      setEventRecurring(false);
+      setEventRecurring("");
     }
   }, [openEventModal]);
 
@@ -68,14 +70,24 @@ export default function EventModal({
     let eventData = {
       title: eventName,
       description: eventDescription,
-      poster: fileUrl,
+      poster_url: fileUrl,
       duration: new Date(endAt).getTime() - new Date(startAt).getTime(),
       date: new Date(startAt).toISOString(),
       tags: [eventTags],
       limit: eventLimit,
-      recurring: eventRecurring,
+      type: eventRecurring,
     };
-    // console.log(eventData);
+    try {
+      await CreateEvent(eventData);
+      alert("Event Created Successfully");
+      setOpenEventModal({
+        open: false,
+        event: null,
+      });
+    } catch (err) {
+      console.log(err);
+    }
+    console.log(eventData);
   };
   return (
     <div>
@@ -199,16 +211,17 @@ export default function EventModal({
                   onChange={(e) => setEventLimit(e.target.value)}
                 />
                 {/* event recurring */}
-                {/* sjow checkbox */}
-                <div className="flex items-start gap-5 w-full">
-                  <input
-                    type="checkbox"
-                    className="w-5 h-5 rounded border border-[#696969] bg-transparent outline-none text-black"
-                    value={false}
-                    onChange={() => setEventRecurring(!eventRecurring)}
-                  />
-                  <p>Recurring</p>
-                </div>
+                <select
+                  className="w-full p-4 rounded border border-[#696969] bg-transparent outline-none"
+                  value={eventRecurring}
+                  onChange={(e) => setEventRecurring(e.target.value)}
+                >
+                  {/* once, day, week, month */}
+                  <option value="once">Once</option>
+                  <option value="day">Day</option>
+                  <option value="week">Week</option>
+                  <option value="month">Month</option>
+                </select>
 
                 {/* submit button */}
                 <Button

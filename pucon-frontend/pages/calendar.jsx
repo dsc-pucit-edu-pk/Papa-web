@@ -74,7 +74,15 @@ function CalendarApp(props) {
     event: null,
   });
 
-  const events = [];
+  const events = [
+    {
+      id: 1,
+      title: "All Day Event",
+      start: new Date(2023, 3, 0),
+      end: new Date(2023, 4, 11),
+    },
+  ];
+
   const user = {};
 
   const calendarRef = useRef();
